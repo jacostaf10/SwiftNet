@@ -8,9 +8,9 @@
 import Foundation
 
 public extension URLSession {
-    func data(for url: URL, parameters: [URLQueryItem]) async throws -> (Data, URLResponse) {
+    func data(for url: URL, parameters: [URLQueryItem] = [], method: HTTPMethod = .get, body: Data? = nil, headers: [String: String] = [:]) async throws -> (Data, URLResponse) {
         do {
-            return try await data(for: .get(url, parameters: parameters))
+            return try await data(for: .request(url, parameters: parameters, method: method, body: body, headers: headers))
         } catch {
             throw NetworkError.general(error)
         }

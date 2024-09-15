@@ -3,8 +3,12 @@
 
 import Foundation
 
-public func get<T: Codable>(_ url: URL, of type: T.Type, parameters: [URLQueryItem] = [], decoder: JSONDecoder = .iso8601()) async throws -> T {
-    let (data, response) = try await URLSession.shared.data(for: url, parameters: parameters)
+public func get<T: Codable>(_ url: URL,
+                            of type: T.Type,
+                            parameters: [URLQueryItem] = [],
+                            decoder: JSONDecoder = JSONDecoder(),
+                            headers: [String: String] = [:]) async throws -> T {
+    let (data, response) = try await URLSession.shared.data(for: url, parameters: parameters, headers: headers)
     guard let httpResponse = response as? HTTPURLResponse else { throw NetworkError.invalidResponse }
     guard httpResponse.statusCode == 200 else { throw NetworkError.status(httpResponse.statusCode) }
     
